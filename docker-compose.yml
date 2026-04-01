@@ -34,7 +34,7 @@ services:
     image: postgres:16-alpine
     container_name: healthsys-postgres
     ports:
-      - "5432:5432"
+      - "5436:5432"
     environment:
       POSTGRES_DB: pacientes_db
       POSTGRES_USER: healthsys
