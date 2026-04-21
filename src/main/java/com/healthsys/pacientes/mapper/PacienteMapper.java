@@ -14,7 +14,8 @@ public class PacienteMapper {
                 entity.getNome(),
                 entity.getDataNascimento(),
                 entity.getSexo(),
-                entity.getTelefone()
+                entity.getTelefone(),
+                entity.getUsuarioId()
         );
     }
 
@@ -25,6 +26,7 @@ public class PacienteMapper {
                 .dataNascimento(dto.dataNascimento())
                 .sexo(dto.sexo())
                 .telefone(dto.telefone())
+                .usuarioId(dto.usuarioId())
                 .build();
     }
 }

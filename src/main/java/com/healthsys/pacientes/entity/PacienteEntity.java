@@ -26,8 +26,12 @@ public class PacienteEntity {
     private LocalDate dataNascimento;
 
     @Column(name = "SX_PAC")
+    @Enumerated(EnumType.STRING)
     private SexoPaciente sexo;
 
     @Column(name = "TEL_PAC")
     private String telefone;
+
+    @Column(name = "ID_USU", nullable = false)
+    private Long usuarioId;
 }

@@ -9,6 +9,7 @@ public record PacienteResponseDTO(
         String nome,
         LocalDate dataNascimento,
         SexoPaciente sexo,
-        String telefone
+        String telefone,
+        Long usuarioId
 ) {
 }

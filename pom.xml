@@ -6,6 +6,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ===== SPRING BOOT ===== -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -23,24 +24,34 @@
         <java.version>17</java.version>
     </properties>
 
+    <!-- 🔥 ESSENCIAL PRA NÃO QUEBRAR O FEIGN -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2023.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
 
         <!-- ===== WEB REST ===== -->
-        <!-- Criar e expor os endpoints REST do servico -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- ===== JPA / HIBERNATE ===== -->
-        <!-- Comunicacao com o banco de dados via ORM -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <!-- ===== POSTGRESQL ===== -->
-        <!-- Driver de conexao com o banco PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -48,14 +59,12 @@
         </dependency>
 
         <!-- ===== VALIDATION ===== -->
-        <!-- Validar dados recebidos nas requisicoes (ex: campo obrigatorio, formato) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <!-- ===== LOMBOK ===== -->
-        <!-- Gera automaticamente getters, setters, construtores, etc -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -63,17 +72,21 @@
         </dependency>
 
         <!-- ===== ACTUATOR ===== -->
-        <!-- Expoe endpoints de health check para o Kubernetes e monitoramento -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!-- ===== PROMETHEUS ===== -->
-        <!-- Exporta metricas no formato que o Prometheus/Grafana consome -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- FEIGN  -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!-- ===== TESTES ===== -->
@@ -99,7 +112,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
 
 </project>

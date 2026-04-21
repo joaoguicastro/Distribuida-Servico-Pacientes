@@ -18,6 +18,7 @@ services:
         condition: service_healthy
     networks:
       - healthsys-network-pacientes
+      - healthsys-network-usuarios
     restart: unless-stopped
     entrypoint: ["sh", "-c", "sleep 10 && java -jar app.jar"]
     healthcheck:
@@ -56,3 +57,7 @@ networks:
   healthsys-network-pacientes:
     name: healthsys-network-pacientes
     driver: bridge
+
+  healthsys-network-usuarios:
+    name: healthsys-network-usuarios
+    external: true
