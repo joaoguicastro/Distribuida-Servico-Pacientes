@@ -2,6 +2,8 @@ package com.healthsys.pacientes.service;
 
 import com.healthsys.pacientes.client.UsuarioClient;
 import com.healthsys.pacientes.entity.PacienteEntity;
+import com.healthsys.pacientes.event.PacienteCriadoEvent;
+import com.healthsys.pacientes.messaging.PacienteProducer;
 import com.healthsys.pacientes.repository.PacienteRepository;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,23 @@ public class PacienteService {
     @Autowired
     private UsuarioClient usuarioClient;
 
+    @Autowired
+    private PacienteProducer pacienteProducer;
+
     public PacienteEntity salvarPaciente (PacienteEntity paciente) {
         validaUsuario(paciente.getUsuarioId());
 
-        return pacienteRepository.save(paciente);
+        PacienteEntity pacienteSalvo = pacienteRepository.save(paciente);
+
+        PacienteCriadoEvent event = PacienteCriadoEvent.builder()
+                .pacienteId(pacienteSalvo.getId())
+                .usuarioId(pacienteSalvo.getUsuarioId())
+                .nome(pacienteSalvo.getNome())
+                .build();
+
+        pacienteProducer.enviarEvento(event);
+
+        return pacienteSalvo;
     }
 
     public void validaUsuario(Long usuarioId) {
