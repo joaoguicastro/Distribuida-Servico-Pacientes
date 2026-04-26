@@ -1,32 +1,16 @@
 services:
   servico-pacientes:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: healthsys-servico-pacientes
     ports:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: pacientes_db
-      DB_USER: healthsys
-      DB_PASS: healthsys
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - healthsys-network-pacientes
-      - healthsys-network-usuarios
-    restart: unless-stopped
-    entrypoint: ["sh", "-c", "sleep 10 && java -jar app.jar"]
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
+      - healthsys-network
 
   postgres:
     image: postgres:16-alpine
@@ -37,27 +21,15 @@ services:
       POSTGRES_DB: pacientes_db
       POSTGRES_USER: healthsys
       POSTGRES_PASSWORD: healthsys
-    volumes:
-      - postgres-pacientes-data:/var/lib/postgresql/data
-    networks:
-      - healthsys-network-pacientes
-    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U healthsys -d pacientes_db"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
-
-volumes:
-  postgres-pacientes-data:
-    driver: local
+      start_period: 15s
+    networks:
+      - healthsys-network
 
 networks:
-  healthsys-network-pacientes:
-    name: healthsys-network-pacientes
-    driver: bridge
-
-  healthsys-network-usuarios:
-    name: healthsys-network-usuarios
+  healthsys-network:
     external: true
